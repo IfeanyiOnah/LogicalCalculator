@@ -144,7 +144,7 @@ const Token& Token_stream::get_token() {
 
 Token_stream ts;
 
-int expression();
+
 
 //primary grammer expression
 int primary() {

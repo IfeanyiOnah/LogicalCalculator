@@ -30,3 +30,12 @@ void error_msg(const std::string& s1, const int i) {
 	s << s1 << ": " << i;
 	error_msg(s.str());
 }
+
+//function declarations
+int expression();
+int primary();
+int Term1();
+int Term2();
+int Term3();
+int expression();
+void execute_cal();
