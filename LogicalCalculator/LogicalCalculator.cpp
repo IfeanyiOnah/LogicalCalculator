@@ -2,7 +2,7 @@
 //In order to implement a program that follow the rule of the grammer in read me 
 //the input expression has to be tokenize inform of (kind,value) pair token
 
-#include "LogicalCalculator.h"
+#include "exception_header.h"
 #include<vector>
 #include<map>
 
@@ -40,15 +40,13 @@ public:
 
 	//non-modifiable member function
 	//function to return kind
-	char& kind() { return m_kind; }
-	const char& kind()const { return m_kind; }
+
+	char kind()const { return m_kind; }
 
 	//function to return val
-	 int& value() { return m_value; }
-	 const int& value()const { return m_value; }
+	 int value()const { return m_value; }
 
-	const string& name()const { return m_name; }
-	string& name() { return m_name; }
+	string name()const { return m_name; }
 
 private:
 	char m_kind;
@@ -213,20 +211,20 @@ string get_name()
 class Variable_base {
 public:
 	Variable_base():variable(map<string,int>()){}
-	void set_varible(string& str, int d);  //set variable
-	void define_var(string& str, int d); // set non-existing variable
-	int get_value(string& name);  //get existing variable with a name
+	void set_varible(const string& str, int d);  //set variable
+	void define_var(const string& str, int d); // set non-existing variable
+	int get_value(const string& name);  //get existing variable with a name
 
 	~Variable_base(){}
 
 private:
-	bool is_declared(string& str);
+	bool is_declared(const string& str);
 	map<string, int> variable;
 };
 
 
 
-bool Variable_base::is_declared(string& str) {
+bool Variable_base::is_declared(const string& str) {
 	try {
 		variable.at(str);
 		return true;
@@ -237,7 +235,7 @@ bool Variable_base::is_declared(string& str) {
 	}
 }
 
-void Variable_base::define_var(string& str, int d) { 
+void Variable_base::define_var(const string& str, int d) { 
 	if (is_declared(str)) {
 		string s = "variable already defined: " + str;
 		error_msg(s, variable_decl);
@@ -246,7 +244,7 @@ void Variable_base::define_var(string& str, int d) {
 	variable[str] = d; 
 }
 
-void Variable_base::set_varible(string& str, int d) {
+void Variable_base::set_varible(const string& str, int d) {
 	
 	if (is_declared(str)) {
 		variable[str] = d;
@@ -259,7 +257,7 @@ void Variable_base::set_varible(string& str, int d) {
 		
 }
 
-int Variable_base::get_value(string& name) {
+int Variable_base::get_value(const string& name) {
 	try {
 		return variable.at(name);
 	}
@@ -273,7 +271,7 @@ int Variable_base::get_value(string& name) {
 
 
 //primary grammer expression
-int primary(Token_stream& ts, Variable_base& vb) {
+ int primary(Token_stream& ts, Variable_base& vb) {
 
 	//Token t = ts.get_token();
 	Token t(0);
@@ -375,7 +373,7 @@ int Update(Token_stream& ts, Variable_base& vb) {
 }
 
 //definition grammer
-int definition(Token_stream& ts, Variable_base& vb) {
+ int definition(Token_stream& ts, Variable_base& vb) {
 
 	//Token t = ts.get_token();
 	Token t(0);
@@ -455,40 +453,5 @@ void execute_cal() {
 }
 
 
-// functions for handling the error
-inline void error_msg(const std::string& s) {
-	throw execution_error(s);
-}
-
-inline void error_msg(const std::string& s1, const std::string& s2) {
-	error_msg(s1 + s2);
-}
-
-inline void error_msg(const std::string& s1, const int i) {
-	throw execution_error(s1, i);
-}
-
-void keep_window_open()
-{
-	std::cin.clear();
-	std::cout << "Please enter a character to exit\n";
-	char ch;
-	std::cin >> ch;
-	return;
-}
-
-void keep_window_open(const std::string& s)
-{
-	if (s == "") return;
-	std::cin.clear();
-	std::cin.ignore(120, '\n');
-	for (;;) {
-		std::cout << "Please enter " << s << " to exit\n";
-		std::string ss;
-		while (std::cin >> ss && ss != s)
-			std::cout << "Please enter " << s << " to exit\n";
-		return;
-	}
-}
 
 
